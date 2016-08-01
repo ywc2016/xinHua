@@ -1,0 +1,98 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+   http://www.springframework.org/schema/beans/spring-beans-4.1.xsd  
+   http://www.springframework.org/schema/aop   
+   http://www.springframework.org/schema/aop/spring-aop-4.1.xsd  
+   http://www.springframework.org/schema/tx  
+   http://www.springframework.org/schema/tx/spring-tx-4.1.xsd  
+   http://www.springframework.org/schema/jee  
+   http://www.springframework.org/schema/jee/spring-jee-4.1.xsd  
+   http://www.springframework.org/schema/context  
+   http://www.springframework.org/schema/context/spring-context-4.1.xsd  
+   http://www.springframework.org/schema/util   
+   http://www.springframework.org/schema/util/spring-util-4.1.xsd
+   http://www.springframework.org/schema/security   
+   http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<!-- 扫描dao包下所有标注@Repository的DAO组件 -->
+	<context:component-scan base-package="dao" />
+
+	<!-- spring的属性加载器，加载properties文件中的属性 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:system.properties</value>
+		</property>
+		<property name="fileEncoding" value="utf-8" />
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<!-- <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+			/> <property name="jdbcUrl" value="jdbc:sqlserver://${jdbcIP}:1433;DatabaseName=tsp2;useUnicode=true;characterEncoding=utf-8" 
+			/> <property name="user" value="${jdbcUser}" /> <property name="password" 
+			value="${jdbcPassword}" /> -->
+
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://${jdbcIP}:3306/xin_hua" />
+		<property name="user" value="${jdbcUser}" />
+		<property name="password" value="${jdbcPassword}" />
+
+		<!-- 连接关闭时默认将所有未提交的操作回滚。默认为false -->
+		<property name="autoCommitOnClose" value="true" />
+		<!-- 连接池中保留的最小连接数 -->
+		<property name="minPoolSize" value="5" />
+		<!-- 连接池中保留的最大连接数。默认为15 -->
+		<property name="maxPoolSize" value="100" />
+		<!-- 初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。默认为3 -->
+		<property name="initialPoolSize" value="5" />
+		<!-- 最大空闲时间，超过空闲时间的连接将被丢弃。为0或负数则永不丢弃。默认为0秒 -->
+		<property name="maxIdleTime" value="60" />
+		<!-- 检查所有连接池中空闲连接的周期。默认为0秒 -->
+		<property name="idleConnectionTestPeriod" value="60" />
+		<!-- 当连接池中的连接用完时，C3P0一次性创建新连接的数目。默认为3 -->
+		<property name="acquireIncrement" value="5" />
+		<!-- 定义在从数据库获取新连接失败后重复尝试获取的次数，默认为30 -->
+		<property name="acquireRetryAttempts" value="30" />
+		<!-- 当连接池用完时客户端调用getConnection()后等获取新连接的时间，超时后将抛出SQLException，如设为0则无限待期等待。单位毫秒，默认为0 -->
+		<property name="checkoutTimeout" value="10000" />
+		<!-- <property name="maxStatements" value="10" /> -->
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQL5Dialect
+				</prop>
+				<!-- <prop key="hibernate.dialect">edu.buaa.sem.common.SQLServerUnicodeDialect</prop> -->
+				<!-- 让Spring来集中管理Hibernate中的session和sessionfactory -->
+				<prop key="hibernate.current_session_context_class">
+					org.springframework.orm.hibernate4.SpringSessionContext
+				</prop>
+			</props>
+		</property>
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:/po</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--扫描edu.buaa.sem.*.service包下所有标注@Service的服务组件 -->
+	<context:component-scan base-package="service" />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+
+</beans>
+
