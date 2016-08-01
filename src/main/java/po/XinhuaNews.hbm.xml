@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-7-29 17:56:12 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 2016-8-1 16:45:00 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="po.XinhuaNews" table="xinhua_news" catalog="xin_hua">
-        <id name="id" type="long">
+        <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="assigned" />
         </id>
