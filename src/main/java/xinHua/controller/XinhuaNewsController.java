@@ -12,18 +12,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import po.XinhuaNews;
 import xinHua.service.XinhuaNewsService;
 
 @Controller
-@RequestMapping("/news")
+@RequestMapping("admin/news")
 public class XinhuaNewsController {
 
 	@Autowired
 	private XinhuaNewsService xinhuaNewsService;
 
-	@RequestMapping("/findNewsByExampleForPagination")
+	@RequestMapping("/findByExampleForPagination")
+	@ResponseBody
 	public Map<String, Object> findByParamsForPagination(
 			@Valid XinhuaNews xinhuaNews,
 			@RequestParam(value = "rows", required = false, defaultValue = "20") String rows,
@@ -34,11 +36,9 @@ public class XinhuaNewsController {
 			// @RequestParam(value = "parentId", required = false) String
 			// parentId,
 			Model model) {
-		Map<String, Object> responseJson = new HashMap<String, Object>();
-		HashMap<String, Object> conditionString = new HashMap<String, Object>();
-		List<HashMap> pojos = new ArrayList();
-		pojos = xinhuaNewsService.findByParamsForPagination(xinhuaNews, page,
+		HashMap<String, Object> responseJson = xinhuaNewsService.findByParamsForPagination(xinhuaNews, page,
 				rows, sort, order);
+		System.out.println(responseJson);
 		return responseJson;
 	}
 }

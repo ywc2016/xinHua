@@ -1,7 +1,9 @@
 package xinHua.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class XinhuaNewsDao {
 			int intRows = Integer
 					.parseInt((rows == null || rows.equals("0")) ? DEFAULT_PAGE_ROWS
 							: rows);
-			String queryString = "from xinhuaNews as a  where 1 = 1";
+			String queryString = "from XinhuaNews as a  where 1 = 1";
 			Query query = contrustString(xinhuaNews, queryString, sort, order);
 			query.setFirstResult((intPage - 1) * intRows);
 			query.setMaxResults(intRows);
@@ -36,6 +38,23 @@ public class XinhuaNewsDao {
 		} catch (RuntimeException re) {
 			// logger.error("findByParamsForPagination failed", re);
 			throw re;
+		}
+	}
+	
+	public long countByParams(XinhuaNews pojo){
+		try{
+		String queryString = "select count(*) from XinhuaNews as a where 1 = 1";
+		Query query = contrustString(pojo ,queryString ,null ,null);
+		List<Object> countList = query.list();
+		long count = 0;
+		if (countList != null) {
+			count = (Long) countList.get(0);
+		}
+		//logger.debug("countByParamsForPagination successful");
+		return count;
+		}catch (HibernateException e) {
+			//logger.error("countByParamsForSize failed", e);
+			throw e;
 		}
 	}
 
@@ -100,8 +119,7 @@ public class XinhuaNewsDao {
 			}
 			if (xinhuaNews.getClassifyDetail() != null
 					&& !xinhuaNews.getClassifyDetail().isEmpty()) {
-				query.setString("classifyDetail",
-						xinhuaNews.getClassifyDetail());
+				query.setString("classifyDetail", xinhuaNews.getClassifyDetail());
 			}
 			if (xinhuaNews.getUrl() != null && !xinhuaNews.getUrl().isEmpty()) {
 				query.setString("url", '%' + xinhuaNews.getUrl() + '%');

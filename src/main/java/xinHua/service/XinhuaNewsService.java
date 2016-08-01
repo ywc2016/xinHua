@@ -15,28 +15,32 @@ public class XinhuaNewsService {
 	@Autowired
 	private XinhuaNewsDao xinhuaNewsDao;
 
-	public List<HashMap> findByParamsForPagination(XinhuaNews xinhuaNews,
+	public HashMap<String, Object> findByParamsForPagination(XinhuaNews xinhuaNews,
 			String page, String rows, String sort, String order) {
 		List<XinhuaNews> pojos;
 		pojos = xinhuaNewsDao.findByExampleForPagination(xinhuaNews, page,
 				rows, sort, order);
-		List<HashMap> userList = new ArrayList();
+		long count = xinhuaNewsDao.countByParams(xinhuaNews);
+		List<HashMap> newsList = new ArrayList();
 		if (pojos != null && pojos.size() != 0) {
 			for (XinhuaNews news : pojos) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("id", news.getId());
-				map.put("web_name", news.getWebName());
+				map.put("webName", news.getWebName());
 				map.put("navigation", news.getNavigation());
 				map.put("classify", news.getClassify());
-				map.put("classify_detail", news.getClassifyDetail());
+				map.put("classifyDetail", news.getClassifyDetail());
 				map.put("url", news.getUrl());
-				map.put("web_level", news.getWebLevel());
+				map.put("webLevel", news.getWebLevel());
 				map.put("ranking", news.getRanking());
 				map.put("belonging", news.getBelonging());
-				userList.add(map);
+				newsList.add(map);
 			}
 		}
-		return userList;
+		HashMap<String, Object> responseJson = new HashMap<String, Object>();
+		responseJson.put("total", count);
+		responseJson.put("rows", newsList);
+		return responseJson;
 	}
 
 }
