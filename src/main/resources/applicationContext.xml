@@ -87,12 +87,14 @@
 		</property>
 	</bean>
 
-	<!--扫描edu.buaa.sem.*.service包下所有标注@Service的服务组件 -->
+	<!--扫描service包下所有标注@Service的服务组件 -->
 	<context:component-scan base-package="service" />
 
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="sessionFactory" />
-
+	<!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
 </beans>
 

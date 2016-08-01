@@ -1,4 +1,4 @@
-package controller;
+package xinHua.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import po.XinhuaNews;
-import service.XinhuaNewsService;
+import xinHua.service.XinhuaNewsService;
 
 @Controller
 @RequestMapping("/news")
 public class XinhuaNewsController {
-	
+
 	@Autowired
-	XinhuaNewsService xinhuaNewsService;
+	private XinhuaNewsService xinhuaNewsService;
 
 	@RequestMapping("/findNewsByExampleForPagination")
 	public Map<String, Object> findByParamsForPagination(
@@ -30,14 +30,15 @@ public class XinhuaNewsController {
 			@RequestParam(value = "page", required = false, defaultValue = "1") String page,
 			@RequestParam(value = "order", required = false, defaultValue = "asc") String order,
 			@RequestParam(value = "sort", required = false, defaultValue = "id") String sort,
-//			@RequestParam(value = "leafId", required = false) String leafId,
-//			@RequestParam(value = "parentId", required = false) String parentId,
+			// @RequestParam(value = "leafId", required = false) String leafId,
+			// @RequestParam(value = "parentId", required = false) String
+			// parentId,
 			Model model) {
 		Map<String, Object> responseJson = new HashMap<String, Object>();
 		HashMap<String, Object> conditionString = new HashMap<String, Object>();
 		List<HashMap> pojos = new ArrayList();
-		pojos = xinhuaNewsService.findByParamsForPagination(
-				xinhuaNews, page, rows, sort, order);
+		pojos = xinhuaNewsService.findByParamsForPagination(xinhuaNews, page,
+				rows, sort, order);
 		return responseJson;
 	}
 }

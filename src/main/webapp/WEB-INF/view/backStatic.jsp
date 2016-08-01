@@ -18,7 +18,7 @@
 	rel="stylesheet" type="text/css" />
 <link href="../jquery-easyui-1.4.2/themes/icon.css" rel="stylesheet"
 	type="text/css" />
-
+<link href="../css/admin.css" rel="stylesheet" type="text/css" />
 <script src="../jquery-easyui-1.4.2/datagrid-detailview.js"
 	type="text/javascript"></script>
 <script src="../jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"

@@ -1,23 +1,24 @@
-package service;
+package xinHua.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import dao.XinhuaNewsDao;
 import po.XinhuaNews;
+import xinHua.dao.XinhuaNewsDao;
 
+@Service
 public class XinhuaNewsService {
-	
 	@Autowired
-	XinhuaNewsDao xinhuaNewsDao;
-	
-	public List<HashMap> findByParamsForPagination(XinhuaNews xinhuaNews
-			,String page,String rows,String sort,String order){
+	private XinhuaNewsDao xinhuaNewsDao;
+
+	public List<HashMap> findByParamsForPagination(XinhuaNews xinhuaNews,
+			String page, String rows, String sort, String order) {
 		List<XinhuaNews> pojos;
-		pojos = xinhuaNewsDao.findByExampleForPagination(xinhuaNews, page,				
+		pojos = xinhuaNewsDao.findByExampleForPagination(xinhuaNews, page,
 				rows, sort, order);
 		List<HashMap> userList = new ArrayList();
 		if (pojos != null && pojos.size() != 0) {
@@ -31,7 +32,7 @@ public class XinhuaNewsService {
 				map.put("url", news.getUrl());
 				map.put("web_level", news.getWebLevel());
 				map.put("ranking", news.getRanking());
-				map.put("belonging", news.getBelonging());	
+				map.put("belonging", news.getBelonging());
 				userList.add(map);
 			}
 		}
